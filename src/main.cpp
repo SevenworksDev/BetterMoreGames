@@ -16,13 +16,15 @@ using namespace geode::prelude;
 class $modify(MenuLayer) {
 public:
     void onMoreGames(CCObject*) {
-        openURL("https://sevenworks.eu.org/moregames.html");
-    }
-
-private:
-    void openURL(const std::string& url) {
+        geode::createQuickPopup(
+            "Confirmation",
+            "View an archive of the more games page?",
+            "Yes", "No",
+            [](auto, bool btn1){
+                if (btn1) {
+                    const std::string& url = "https://sevenworks.eu.org/moregames.html";
 #ifdef _WIN32
-        ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        ShellExecuteA(NULL, "start", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #elif defined(__APPLE__)
         std::string command = "open " + url;
         system(command.c_str());
@@ -30,5 +32,8 @@ private:
         std::string command = "xdg-open " + url;
         system(command.c_str());
 #endif
-    }
+                }
+            }
+        );
+    };
 };
